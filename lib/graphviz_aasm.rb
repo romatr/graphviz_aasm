@@ -1,5 +1,6 @@
 require "aasm"
 require "aasm/graph"
+require "active_support/inflector"
 require "graphviz_aasm/version"
 
 module GraphvizAasm
