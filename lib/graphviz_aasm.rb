@@ -19,7 +19,7 @@ module GraphvizAasm
           state.draw(graph)
         end
 
-        klass.aasm.events.each_value do |event|
+        klass.aasm.events.each do |event|
           event.draw(graph)
         end
         graph.output
@@ -27,18 +27,18 @@ module GraphvizAasm
     end
   end
 
-  AASM::State.class_eval do
+  AASM::Core::State.class_eval do
     def draw(graph)
       node = graph.add_nodes(self.human_name, shape: final? ? "doublecircle" : "ellipse")
       graph.add_edge(graph.add_nodes("starting_state", shape: "point"), node) if initial?
     end
 
     def initial?
-      @clazz.aasm.initial_state == self.name
+      @klass.aasm.initial_state == self.name
     end
 
     def final?
-      !@clazz.aasm.events.any? do |_, event|
+      !@klass.aasm.events.any? do |event|
         event.transitions.any? do |transition|
           transition.from == self.name
         end
@@ -46,7 +46,7 @@ module GraphvizAasm
     end
   end
 
-  AASM::Event.class_eval do
+  AASM::Core::Event.class_eval do
     def draw(graph)
       transitions.each do |transition|
         graph.add_edge(transition.from.to_s.capitalize, transition.to.to_s.capitalize)
