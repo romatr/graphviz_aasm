@@ -5,7 +5,7 @@ module AASM
     def initialize(class_name, options = {})
       options = {path: '.'}.merge(options)
 
-      @file_path = File.join(options[:path], "#{class_name.parameterize('_')}_aasm.png")
+      @file_path = File.join(options[:path], "#{class_name.parameterize(separator: '_')}_aasm.png")
       super(:G)
     end
 
